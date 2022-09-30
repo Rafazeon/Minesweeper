@@ -8,6 +8,30 @@ type Pms = 'admin' | 'user' | 'manager'
 
 type TuplePermission = [Pms, Pms]
 
+type PermissionsWithoutAdmin = Exclude<Permissions, 'admin'>
+
+interface DepartmentsForPermissions {
+    depName: string;
+    lvl: number;
+}
+
+const DepsForPerms = Record<Pms, DepartmentsForPermissions> = {
+    admin: {
+        depName: 'security',
+        lvl: 10
+    },
+
+    user: {
+        depName: 'sales',
+        lvl: 5
+    },
+
+    manager: {
+        depName: 'sales',
+        lvl: 10
+    }
+}
+
 // Generic Params
 type BasicUser<A = boolean, P = TuplePermission> = {
   name: string;
@@ -20,6 +44,14 @@ type BasicUser<A = boolean, P = TuplePermission> = {
 type AdvancedUser = {
     account: number;
 }
+
+type BasicUserWithoutPermissions = Omit<BasicUser, 'permissions'>;
+
+// Utility types
+type BasicUserReadonly = Readonly<BasicUser>
+type BasicUserRequired = Required<BasicUser>
+type BasicUserPartial = Partial<BasicUser>
+type BasicUserReadonlyRequired = Readonly<Required<BasicUser>>;
 
 // Intersection Params
 type FullUser<A = boolean, P = string[]> = BasicUser<A, P> & AdvancedUser
@@ -41,6 +73,10 @@ function getFirst<T>(arr: T[]): T {
 }
 
 getFirst<FullUser>(usersArray);
+
+type BasicFunction = () => FullUser[];
+
+type getFirstReturnType = ReturnType<BasicFunction>
 
 type MathFunc = (a: number, b: number) => number;
 
