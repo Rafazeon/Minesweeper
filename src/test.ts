@@ -4,20 +4,31 @@ let c: string;
 
 let d: Array<string>;
 
+type Permissions = 'admin' | 'user' | 'manager'
+
 // Generic Params
-interface BasicUser<A = boolean> {
+type BasicUser<A = boolean, P = string[]> = {
   name: string;
   surname: string;
   age: number;
   isAdmin: A;
-  permissions?: string[];
+  permissions?: P[];
 }
 
-const user: BasicUser = {
+type AdvancedUser = {
+    account: number;
+}
+
+// Intersection Params
+type FullUser<A = boolean, P = string[]> = BasicUser<A, P> & AdvancedUser
+
+const user: FullUser<boolean, Permissions> = {
   name: "Rafael",
   surname: "Oliveira",
   age: 30,
   isAdmin: true,
+  account: 100,
+  permissions: ['admin', 'user', 'manager']
 };
 
 const user2: BasicUser<number> = {
